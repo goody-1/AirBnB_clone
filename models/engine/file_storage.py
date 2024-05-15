@@ -19,15 +19,12 @@ class FileStorage:
         """ sets in @__objects the @obj with key:
             <obj class name>.id """
 
-        name = str(obj.__class__) + "." + obj.id
-        self.__objects.update({name: obj})
+        name = "BaseModel." + obj.id
+        self.__objects.update({name: obj.to_dict()})
 
     def save(self):
         """ serializes @__objects to the JSON file """
 
-        print("\n\n\n\n")
-        print(self.__file_path)
-        print("\n\n\n\n")
         with open(self.__file_path, "w+", encoding="utf-8") as fp:
             json.dump(self.__objects, fp)
 

@@ -32,7 +32,6 @@ class BaseModel:
             [<class name>] (<self.id>) <self.__dict__>
             """
         form = f"[BaseModel] ({self.id}) {self.__dict__}"
-        print(form)
 
         return (form)
 
