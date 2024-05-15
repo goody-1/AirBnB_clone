@@ -2,6 +2,7 @@
 
 import cmd
 from models.base_model import BaseModel
+from models import storage
 
 
 class HBNBCommand(cmd.Cmd):
@@ -50,12 +51,18 @@ class HBNBCommand(cmd.Cmd):
         args = line.split()
         classes = ["BaseModel"]
 
-        if not args[0] or args[0] not in classes:
+        if not args:
+            print("** class name is missing **")
+        elif args[0] not in classes:
             print("** class doesn't exist **")
-        elif args[1] == "":
-            print("** instance id missing **")
         else:
-            print(args[1])
+            try:
+                print(storage.all()[f"BaseModel.{args[1]}"])
+            except IndexError:
+                print("** instance id missing **")
+            except KeyError:
+                print("** no instance found **")
+
 
     def help_create(self):
         """Help for create"""
