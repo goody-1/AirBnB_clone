@@ -26,12 +26,13 @@ class BaseModel:
             up = datetime.strptime(up, format("%Y-%m-%dT%H:%M:%S.%f"))
             self.__dict__.update({"created_at": cr, "updated_at": up})
 
+
     def __str__(self):
         """ prints data about an instance:
             format:
             [<class name>] (<self.id>) <self.__dict__>
             """
-        form = f"[BaseModel] ({self.id}) {self.__dict__}"
+        form = f"[{type(self).__name__}] ({self.id}) {self.__dict__}"
 
         return (form)
 
@@ -47,8 +48,9 @@ class BaseModel:
 
         instance_dict = dict()
         instance_dict.update(**self.__dict__)
-        instance_dict.update({"__class__": "BaseModel",
+        instance_dict.update({"__class__": type(self).__name__,
                               "created_at": self.created_at.isoformat(),
                               "updated_at": self.created_at.isoformat()})
+        
 
         return (instance_dict)

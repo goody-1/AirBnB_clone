@@ -9,6 +9,7 @@ class HBNBCommand(cmd.Cmd):
     """ HBNB cmd class """
     
     prompt = "(hbnb) "
+    classes = ["BaseModel"]
 
     def do_EOF(self, line):
         """ Returns true to give a clean way to exit
@@ -37,23 +38,23 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, line):
         """ Creates a new instance """
         args = line.split()
-        classes = ["BaseModel"]
 
         if args == []:
             print("** class name missing **")
-        elif args[0] not in classes:
+        elif args[0] not in self.classes:
             print("** class doesn't exist **")
         else:
             dummy = BaseModel()
             print(dummy.id)
 
     def do_show(self, line):
+        """ Prints the string representation of an instance
+            based on the class name and id. """
         args = line.split()
-        classes = ["BaseModel"]
 
         if not args:
             print("** class name is missing **")
-        elif args[0] not in classes:
+        elif args[0] not in self.classes:
             print("** class doesn't exist **")
         else:
             try:
@@ -63,6 +64,24 @@ class HBNBCommand(cmd.Cmd):
             except KeyError:
                 print("** no instance found **")
 
+
+    def do_destroy(self, line):
+        """ Deletes an instance based on the class name
+            and id. """
+        args = line.split()
+
+        if not args:
+            print("** class name is missing **")
+        elif args[0] not in self.classes:
+            print("** class doesn't exist **")
+        else:
+            try:
+                storage.all().pop(f"BaseModel.{args[1]}")
+                storage.save()
+            except IndexError:
+                print("** instance id missing **")
+            except KeyError:
+                print("** no instance found **")
 
     def help_create(self):
         """Help for create"""
