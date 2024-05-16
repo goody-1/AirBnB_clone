@@ -2,6 +2,7 @@
 
 import cmd
 from models.base_model import BaseModel
+from models.user import User
 from models import storage
 
 
@@ -9,7 +10,7 @@ class HBNBCommand(cmd.Cmd):
     """ HBNB cmd class """
 
     prompt = "(hbnb) "
-    classes = ["BaseModel"]
+    classes = ["BaseModel", "User"]
 
     def do_EOF(self, line):
         """ Returns true to give a clean way to exit
@@ -47,6 +48,10 @@ class HBNBCommand(cmd.Cmd):
                     dummy = BaseModel()
                     print(dummy.id)
                     storage.save()
+                case "User":
+                    dummy = User()
+                    print(dummy.id)
+                    storage.save()
                 case _:
                     print("** class doesn't exist **")
 
@@ -62,7 +67,11 @@ class HBNBCommand(cmd.Cmd):
         else:
             try:
                 obj = storage.all()[f"{args[0]}.{args[1]}"]
-                print(BaseModel(**obj))
+                match args[0]:
+                    case "BaseModel":
+                        print(BaseModel(**obj))
+                    case "User":
+                        print(User(**obj))
             except IndexError:
                 print("** instance id missing **")
             except KeyError:
@@ -93,7 +102,11 @@ class HBNBCommand(cmd.Cmd):
         sobjlist = list()
         if not args:
             for value in storage.all().values():
-                sobjlist.append(str(BaseModel(**value)))
+                match value["__class__"]:
+                    case "BaseModel":
+                        sobjlist.append(str(BaseModel(**value)))
+                    case "User":
+                        sobjlist.append(str(User(**value)))
         else:
             match args[0]:
                 case "BaseModel":
@@ -110,7 +123,34 @@ class HBNBCommand(cmd.Cmd):
 
         print(sobjlist)
 
+    def do_update(self, line):
+        """ updates an instance. """
+        args = line.split()
 
+        if len(args) <= 3:
+            match len(args):
+                case 0:
+                    print("** class name missing **")
+                    return
+                case 1:
+                    print("** instance id missing **")
+                    return
+                case 2:
+                    print("** attribute missing **")
+                    return
+                case 3:
+                    print("** value missing **")
+                    return
+
+        if args[0] in self.classes:
+            try:
+                obj = storage.all()[f"{args[0]}.{args[1]}"]
+                obj.update({args[2]: args[3]})
+                storage.save()
+            except KeyError:
+                print("** no instance found **")
+        else:
+            print("** class doesn't exist **")
 
     def help_create(self):
         """Help for create"""
@@ -131,6 +171,11 @@ class HBNBCommand(cmd.Cmd):
         """Help for all"""
         print('\n'.join(["Prints all string representaion of all instances",
                         "based or not on the class name."]))
+
+    def help_update(self):
+        """Help for update"""
+        print('\n'.join(["Updates an instance bsed on the class name and id",
+                        "by adding or updating attribute."]))
 
 
 if __name__ == '__main__':
