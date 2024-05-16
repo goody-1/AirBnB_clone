@@ -2,7 +2,6 @@
 """
 Unit tests for the base_model module
 """
-from contextlib import redirect_stdout
 import unittest
 from datetime import datetime
 from models.base_model import BaseModel
@@ -11,30 +10,28 @@ import logging
 
 
 logging.basicConfig(level=logging.DEBUG)
-
-# Optional: Create a logger for your test class
 logger = logging.getLogger(__name__)
+
 
 # test the class instantiation and attributes
 class TestBaseModelInstantiation(unittest.TestCase):
     """
     Test the class instantiation and attributes
     """
-    @classmethod
-    def setUpClass(cls) -> None:
-        """
-        set up the class resources for the tests
-        """
-        cls.test_model1 = BaseModel()
-        cls.test_model2 = BaseModel()
 
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """"
-        tear down the class resources that were set up in the setUpClass method
+    def setUp(self) -> None:
         """
-        del cls.test_model1
-        del cls.test_model2
+        set up the resources for the tests
+        """
+        self.test_model1 = BaseModel()
+        self.test_model2 = BaseModel()
+
+    def tearDown(self) -> None:
+        """"
+        tear down the resources that were set up in the setUpClass method
+        """
+        del self.test_model1
+        del self.test_model2
 
     def test_attributes(self):
         """"Test each attribute of the BaseModel class"""
@@ -84,10 +81,6 @@ class TestBaseModelInstantiation(unittest.TestCase):
         dict_rep = self.test_model1.to_dict()
         self.assertTrue(type(dict_rep) is dict)
         self.assertTrue(dict_rep["__class__"] == "BaseModel")
-
-        logger.debug(print(dict_rep["updated_at"]));
-        logger.debug(print(self.test_model1.updated_at.isoformat()))
-
         self.assertTrue(
             dict_rep["updated_at"] == self.test_model1.updated_at.isoformat())
         self.assertTrue(
