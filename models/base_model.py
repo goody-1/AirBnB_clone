@@ -26,7 +26,6 @@ class BaseModel:
             up = datetime.strptime(up, format("%Y-%m-%dT%H:%M:%S.%f"))
             self.__dict__.update({"created_at": cr, "updated_at": up})
 
-
     def __str__(self):
         """ prints data about an instance:
             format:
@@ -51,6 +50,5 @@ class BaseModel:
         instance_dict.update({"__class__": type(self).__name__,
                               "created_at": self.created_at.isoformat(),
                               "updated_at": self.created_at.isoformat()})
-        
 
         return (instance_dict)
