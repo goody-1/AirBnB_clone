@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+"""
+The Base Model module
+Defines all common attributes/methods for other classes
+"""
 
 import uuid
 from datetime import datetime
