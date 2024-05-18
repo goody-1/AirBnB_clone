@@ -2,8 +2,7 @@
 
 from models.base_model import BaseModel
 
-
-class State(BaseModel):
-    """ a state class """
+class Amenity(BaseModel):
+    """ Amenity Class """
 
     name = str()

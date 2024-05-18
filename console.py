@@ -1,16 +1,24 @@
 #!/urs/bin/python3
 
 import cmd
+from models.amenity import Amenity
 from models.base_model import BaseModel
-from models.user import User
+from models.city import City
+from models.state import State
 from models import storage
+from models.place import Place
+from models.review import Review
+from models.user import User
 
 
 class HBNBCommand(cmd.Cmd):
     """ HBNB cmd class """
 
     prompt = "(hbnb) "
-    classes = ["BaseModel", "User"]
+    classes = {"BaseModel": BaseModel, "User": User, "State": State,
+               "City": City, "Amenity": Amenity, "Place": Place,
+               "Review": Review}
+
 
     def do_EOF(self, line):
         """ Returns true to give a clean way to exit
@@ -43,17 +51,12 @@ class HBNBCommand(cmd.Cmd):
         if args == []:
             print("** class name missing **")
         else:
-            match args[0]:
-                case "BaseModel":
-                    dummy = BaseModel()
-                    print(dummy.id)
-                    storage.save()
-                case "User":
-                    dummy = User()
-                    print(dummy.id)
-                    storage.save()
-                case _:
-                    print("** class doesn't exist **")
+            try:
+                dummy = self.classes[args[0]]()
+                print(dummy.id)
+                storage.save()
+            except KeyError:
+                print("** class doesn't exist **")
 
     def do_show(self, line):
         """ Prints the string representation of an instance
@@ -67,15 +70,11 @@ class HBNBCommand(cmd.Cmd):
         else:
             try:
                 obj = storage.all()[f"{args[0]}.{args[1]}"]
-                match args[0]:
-                    case "BaseModel":
-                        print(BaseModel(**obj))
-                    case "User":
-                        print(User(**obj))
-            except IndexError:
-                print("** instance id missing **")
+                print(self.classes[args[0]](**obj))
             except KeyError:
                 print("** no instance found **")
+            except IndexError:
+                print("** instance id missing **")
 
     def do_destroy(self, line):
         """ Deletes an instance based on the class name
@@ -102,24 +101,16 @@ class HBNBCommand(cmd.Cmd):
         sobjlist = list()
         if not args:
             for value in storage.all().values():
-                match value["__class__"]:
-                    case "BaseModel":
-                        sobjlist.append(str(BaseModel(**value)))
-                    case "User":
-                        sobjlist.append(str(User(**value)))
+                obj = self.classes[value["__class__"]](**value)
+                sobjlist.append(str(obj))
         else:
-            match args[0]:
-                case "BaseModel":
-                    for value in storage.all().values():
-                        if value["__class__"] == args[0]:
-                            sobjlist.append(str(BaseModel(**value)))
-                case "User":
-                    for value in storage.all().values():
-                        if value["__class__"] == args[0]:
-                            sobjlist.append(str(User(**value)))
-                case _:
-                    print("** class doesn't exist **")
-                    return
+            if args[0] not in self.classes:
+                print("** class doesn't exist **")
+                return
+            for value in storage.all().values():
+                if value["__class__"] == args[0]:
+                    obj = self.classes[value["__class__"]](**value)
+                    sobjlist.append(str(obj))
 
         print(sobjlist)
 
@@ -178,5 +169,6 @@ class HBNBCommand(cmd.Cmd):
                         "by adding or updating attribute."]))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    print(HBNBCommand().use_rawinput)
     HBNBCommand().cmdloop()
