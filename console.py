@@ -118,33 +118,26 @@ class HBNBCommand(cmd.Cmd):
         """ updates an instance. """
         args = line.split()
 
-        argscount = len(args)
+        argc = len(args)
         if argc == 0:
-            print(
-        if argscount <= 3:
-            match argscount:
-                case 0:
-                    print("** class name missing **")
-                    return
-                case 1:
-                    print("** instance id missing **")
-                    return
-                case 2:
-                    print("** attribute missing **")
-                    return
-                case 3:
-                    print("** value missing **")
-                    return
-
-        if args[0] in self.classes:
-            try:
-                obj = storage.all()[f"{args[0]}.{args[1]}"]
-                obj.update({args[2]: args[3]})
-                storage.save()
-            except KeyError:
-                print("** no instance found **")
+            print("** class name missing **")
+        elif argc == 1:
+            print("** instance id missing **")
+        elif argc == 2:
+            print("** attribute missing **")
+        elif argc == 3:
+            print("** value missing **")
         else:
-            print("** class doesn't exist **")
+
+            if args[0] in self.classes:
+                try:
+                    obj = storage.all()[f"{args[0]}.{args[1]}"]
+                    obj.update({args[2]: args[3]})
+                    storage.save()
+                except KeyError:
+                    print("** no instance found **")
+            else:
+                print("** class doesn't exist **")
 
     def help_create(self):
         """Help for create"""
