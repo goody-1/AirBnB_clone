@@ -116,28 +116,38 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, line):
         """ updates an instance. """
-        args = line.split()
+        args = line.split(" ")
 
-        argc = len(args)
-        if argc == 0:
+        if len(args) == 0:
             print("** class name missing **")
-        elif argc == 1:
+        elif len(args) == 1:
             print("** instance id missing **")
-        elif argc == 2:
+        elif len(args) == 2:
             print("** attribute missing **")
-        elif argc == 3:
-            print("** value missing **")
+        elif len(args) == 3:
+            if type(eval(args[2])) != dict:
+                print("** value missing **")
         else:
 
             if args[0] in self.classes:
                 try:
                     obj = storage.all()[f"{args[0]}.{args[1]}"]
-                    obj.update({args[2]: args[3]})
-                    storage.save()
+                    if eval(args[2]).__class__ == dict:
+                        print("yes it is")
+                    else:
+                        arg_type = (eval(args[3])).__class__
+                        obj.update({args[2]: arg_type(args[3])})
+                        storage.save()
                 except KeyError:
                     print("** no instance found **")
             else:
                 print("** class doesn't exist **")
+
+    def default(self, line):
+        """ default """
+        args = line.split()
+        if args[0] in self.classes:
+            print("yes")
 
     def help_create(self):
         """Help for create"""
