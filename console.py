@@ -118,8 +118,11 @@ class HBNBCommand(cmd.Cmd):
         """ updates an instance. """
         args = line.split()
 
-        if len(args) <= 3:
-            match len(args):
+        argscount = len(args)
+        if argc == 0:
+            print(
+        if argscount <= 3:
+            match argscount:
                 case 0:
                     print("** class name missing **")
                     return
