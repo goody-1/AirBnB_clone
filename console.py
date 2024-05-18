@@ -1,4 +1,4 @@
-#!/urs/bin/python3
+#!/usr/bin/python3
 
 import cmd
 from models.amenity import Amenity
@@ -18,7 +18,6 @@ class HBNBCommand(cmd.Cmd):
     classes = {"BaseModel": BaseModel, "User": User, "State": State,
                "City": City, "Amenity": Amenity, "Place": Place,
                "Review": Review}
-
 
     def do_EOF(self, line):
         """ Returns true to give a clean way to exit
