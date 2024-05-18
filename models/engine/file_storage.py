@@ -26,7 +26,7 @@ class FileStorage:
         """ serializes @__objects to the JSON file """
 
         with open(self.__file_path, "w", encoding="utf-8") as fp:
-            json.dump(self.__objects, fp, indent=2)
+            json.dump(self.__objects, fp)
 
     def reload(self):
         """ deserializes the JSON file to @__objects """
