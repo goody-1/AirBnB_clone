@@ -152,7 +152,8 @@ class HBNBCommand(cmd.Cmd):
                         obj.__dict__[args[2]] = arg_type(args[3])
                     else:
                         obj.__dict__[args[2]] = args[3]
-                    storage.save()
+                    #storage.save()
+                    obj.save()
                 except KeyError:
                     print("** no instance found **")
             else:
