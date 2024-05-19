@@ -21,24 +21,12 @@ class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
 
     def do_EOF(self, line):
-        """ Returns true to give a clean way to exit
-            your interpreter """
+        """a clean way to quit"""
         return (True)
 
     def do_quit(self, line):
-        """ Returns true to give a clean way to exit
-            your interpreter """
+        """a clean way to quit"""
         return (True)
-
-    def help_EOF(self):
-        """Help for EOF"""
-        print('\n'.join(["Returns true to give a clean way to",
-                        "exit your interpreter."]))
-
-    def help_quit(self):
-        """Help for EOF"""
-        print('\n'.join(["Returns true to give a clean way to",
-                        "exit your interpreter."]))
 
     def emptyline(self):
         """ execute nothing when entering an empty line """
@@ -177,11 +165,6 @@ class HBNBCommand(cmd.Cmd):
             funcs[func](line)
         else:
             print("*** Unkown syntax: {}".format(line))
-
-    def help_create(self):
-        """Help for create"""
-        print('\n'.join(["Creats a new instance, saves it",
-                        "(to the JSON file) an prints it."]))
 
     def help_show(self):
         """Help for show"""
