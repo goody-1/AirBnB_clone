@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+""" filestorage.py
+    The FileStorage class file """
 
 import json
 from models.user import User
@@ -48,7 +50,6 @@ class FileStorage:
 
         try:
             with open(self.__file_path, "r", encoding="utf-8") as fp:
-                #self.__objects = json.load(fp)
                 objdict = json.load(fp)
                 for key, value in objdict.items():
                     obj = self.classes[value['__class__']](**value)

@@ -1,9 +1,10 @@
 #!/usr/bin/python3
+""" base_model.py
+    The BaseModel Class file """
 
 import uuid
 from datetime import datetime
 import models
-#from models import storage
 
 
 class BaseModel:

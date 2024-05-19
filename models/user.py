@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+""" user.py
+    The user class file """
 
 from models.base_model import BaseModel
 

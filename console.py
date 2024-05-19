@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+""" console.py
+    The console of AirBnB project"""
 
 import cmd
 import re
@@ -110,6 +112,24 @@ class HBNBCommand(cmd.Cmd):
 
         print(sobjlist)
 
+    def do_count(self, line):
+        """ Prints all string """
+        args = shlex.split(line)
+
+        count = 0
+        if not args:
+            print("** class name missing **")
+            return
+        else:
+            if args[0] not in storage.classes:
+                print("** class doesn't exist **")
+                return
+            for obj in storage.all().values():
+                if obj.__class__.__name__ == args[0]:
+                    count += 1
+
+        print(count)
+
     def do_update(self, line):
         """ updates an instance. """
         args = shlex.split(line)
@@ -141,7 +161,8 @@ class HBNBCommand(cmd.Cmd):
     def default(self, line):
         """ default """
         funcs = {"all": self.do_all, "show": self.do_show,
-                 "update": self.do_update}
+                 "update": self.do_update, "count": self.do_count,
+                 "destroy": self.do_destroy}
 
         isfunc = re.search(r"^(.*)\.(.*)\((.*)\)", line)
         if isfunc and isfunc.group(2) in funcs:
@@ -154,24 +175,8 @@ class HBNBCommand(cmd.Cmd):
                 newargs.append(arg.strip(" \""))
             line = model + " " + " ".join(newargs)
             funcs[func](line)
-            #print("model: {}\nfunc : {}\nargs : {}".format(model, func, argslist))
-            #print("line : {}".format(line))
-        else:
-            print("Naaaah")
-            print(isfunc is None)
-        """
-        isfunc = re.match("\((.*)\)"
-        isbraces = re.search("\(.*\)", line)
-        if isbraces is not None:
-            args = re.search("[\.\(\)]", line)
-            if args is not None and args[1] in funcs:
-                nline = re.split(" ", line, 1)
-                funcs[args[1]](nline[1])
-            else:
-                print("*** Unkown syntax: {}".format(line))
         else:
             print("*** Unkown syntax: {}".format(line))
-            """
 
     def help_create(self):
         """Help for create"""
@@ -197,6 +202,10 @@ class HBNBCommand(cmd.Cmd):
         """Help for update"""
         print('\n'.join(["Updates an instance bsed on the class name and id",
                         "by adding or updating attribute."]))
+
+    def help_count(self):
+        """Help for count"""
+        print('\n'.join(["Retrive the number of instances of a class"]))
 
 
 if __name__ == "__main__":

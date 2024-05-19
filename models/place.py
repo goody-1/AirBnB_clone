@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+""" place.py
+    The place Class file """
 
 from models.base_model import BaseModel
 
