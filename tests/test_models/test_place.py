@@ -93,7 +93,8 @@ class TestPlace(unittest.TestCase):
             self.place.id, self.place.__dict__)
         self.assertEqual(str(self.place), expected_str)
 
-    # test all docs
+
+# test all docs
 class TestPlaceModelDocs(unittest.TestCase):
     """
     Tests for the Place class documentation
@@ -116,7 +117,6 @@ class TestPlaceModelDocs(unittest.TestCase):
         """
         for method in dir(Place):
             self.assertTrue(len(method.__doc__) > 10)
-
 
 
 if __name__ == "__main__":

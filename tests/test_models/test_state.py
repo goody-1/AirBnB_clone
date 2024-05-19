@@ -44,7 +44,8 @@ class TestState(unittest.TestCase):
         state.name = 'California'
         self.assertEqual(state.name, 'California')
 
-    # test all docs
+
+# test all docs
 class TestStateModelDocs(unittest.TestCase):
     """
     Tests for the State class documentation
@@ -67,7 +68,6 @@ class TestStateModelDocs(unittest.TestCase):
         """
         for method in dir(State):
             self.assertTrue(len(method.__doc__) > 10)
-
 
 
 if __name__ == '__main__':
