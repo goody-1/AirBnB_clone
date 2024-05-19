@@ -1,6 +1,10 @@
-#!/urs/bin/python3
+#!/usr/bin/python3
+""" console.py
+    The console of AirBnB project"""
 
 import cmd
+import re
+import shlex
 from models.amenity import Amenity
 from models.base_model import BaseModel
 from models.city import City
@@ -15,10 +19,6 @@ class HBNBCommand(cmd.Cmd):
     """ HBNB cmd class """
 
     prompt = "(hbnb) "
-    classes = {"BaseModel": BaseModel, "User": User, "State": State,
-               "City": City, "Amenity": Amenity, "Place": Place,
-               "Review": Review}
-
 
     def do_EOF(self, line):
         """ Returns true to give a clean way to exit
@@ -46,13 +46,13 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, line):
         """ Creates a new instance """
-        args = line.split()
+        args = shlex.split(line)
 
         if args == []:
             print("** class name missing **")
         else:
             try:
-                dummy = self.classes[args[0]]()
+                dummy = storage.classes[args[0]]()
                 print(dummy.id)
                 storage.save()
             except KeyError:
@@ -61,16 +61,16 @@ class HBNBCommand(cmd.Cmd):
     def do_show(self, line):
         """ Prints the string representation of an instance
             based on the class name and id. """
-        args = line.split()
+        args = shlex.split(line)
 
         if not args:
             print("** class name is missing **")
-        elif args[0] not in self.classes:
+        elif args[0] not in storage.classes:
             print("** class doesn't exist **")
         else:
             try:
                 obj = storage.all()[f"{args[0]}.{args[1]}"]
-                print(self.classes[args[0]](**obj))
+                print(obj)
             except KeyError:
                 print("** no instance found **")
             except IndexError:
@@ -79,11 +79,11 @@ class HBNBCommand(cmd.Cmd):
     def do_destroy(self, line):
         """ Deletes an instance based on the class name
             and id. """
-        args = line.split()
+        args = shlex.split(line)
 
         if not args:
             print("** class name is missing **")
-        elif args[0] not in self.classes:
+        elif args[0] not in storage.classes:
             print("** class doesn't exist **")
         else:
             try:
@@ -96,27 +96,43 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, line):
         """ Prints all string """
-        args = line.split()
+        args = shlex.split(line)
 
         sobjlist = list()
         if not args:
-            for value in storage.all().values():
-                obj = self.classes[value["__class__"]](**value)
+            for obj in storage.all().values():
                 sobjlist.append(str(obj))
         else:
-            if args[0] not in self.classes:
+            if args[0] not in storage.classes:
                 print("** class doesn't exist **")
                 return
-            for value in storage.all().values():
-                if value["__class__"] == args[0]:
-                    obj = self.classes[value["__class__"]](**value)
+            for obj in storage.all().values():
+                if obj.__class__.__name__ == args[0]:
                     sobjlist.append(str(obj))
 
         print(sobjlist)
 
+    def do_count(self, line):
+        """ Prints all string """
+        args = shlex.split(line)
+
+        count = 0
+        if not args:
+            print("** class name missing **")
+            return
+        else:
+            if args[0] not in storage.classes:
+                print("** class doesn't exist **")
+                return
+            for obj in storage.all().values():
+                if obj.__class__.__name__ == args[0]:
+                    count += 1
+
+        print(count)
+
     def do_update(self, line):
         """ updates an instance. """
-        args = line.split(" ")
+        args = shlex.split(line)
 
         if len(args) == 0:
             print("** class name missing **")
@@ -125,19 +141,18 @@ class HBNBCommand(cmd.Cmd):
         elif len(args) == 2:
             print("** attribute missing **")
         elif len(args) == 3:
-            if type(eval(args[2])) != dict:
-                print("** value missing **")
+            print("** value missing **")
         else:
 
-            if args[0] in self.classes:
+            if args[0] in storage.classes:
                 try:
                     obj = storage.all()[f"{args[0]}.{args[1]}"]
-                    if eval(args[2]).__class__ == dict:
-                        print("yes it is")
+                    if args[2] in obj.__class__.__dict__.keys():
+                        arg_type = type(obj.__class__.__dict__[args[2]])
+                        obj.__dict__[args[2]] = arg_type(args[3])
                     else:
-                        arg_type = (eval(args[3])).__class__
-                        obj.update({args[2]: arg_type(args[3])})
-                        storage.save()
+                        obj.__dict__[args[2]] = args[3]
+                    storage.save()
                 except KeyError:
                     print("** no instance found **")
             else:
@@ -145,9 +160,23 @@ class HBNBCommand(cmd.Cmd):
 
     def default(self, line):
         """ default """
-        args = line.split()
-        if args[0] in self.classes:
-            print("yes")
+        funcs = {"all": self.do_all, "show": self.do_show,
+                 "update": self.do_update, "count": self.do_count,
+                 "destroy": self.do_destroy}
+
+        isfunc = re.search(r"^(.*)\.(.*)\((.*)\)", line)
+        if isfunc and isfunc.group(2) in funcs:
+            model = isfunc.group(1)
+            func = isfunc.group(2)
+            # Modifying args
+            argslist = re.split(",", isfunc.group(3))
+            newargs = list()
+            for arg in argslist:
+                newargs.append(arg.strip(" \""))
+            line = model + " " + " ".join(newargs)
+            funcs[func](line)
+        else:
+            print("*** Unkown syntax: {}".format(line))
 
     def help_create(self):
         """Help for create"""
@@ -173,6 +202,10 @@ class HBNBCommand(cmd.Cmd):
         """Help for update"""
         print('\n'.join(["Updates an instance bsed on the class name and id",
                         "by adding or updating attribute."]))
+
+    def help_count(self):
+        """Help for count"""
+        print('\n'.join(["Retrive the number of instances of a class"]))
 
 
 if __name__ == "__main__":
