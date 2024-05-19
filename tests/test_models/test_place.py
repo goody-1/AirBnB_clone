@@ -5,6 +5,7 @@ Test module for the Place class.
 
 import unittest
 from models.place import Place
+from models import place
 
 
 class TestPlace(unittest.TestCase):
@@ -91,6 +92,31 @@ class TestPlace(unittest.TestCase):
         expected_str = "[Place] ({}) {}".format(
             self.place.id, self.place.__dict__)
         self.assertEqual(str(self.place), expected_str)
+
+    # test all docs
+class TestPlaceModelDocs(unittest.TestCase):
+    """
+    Tests for the Place class documentation
+    """
+    def test_doc_file(self):
+        """
+        Test for the documentation in the module
+        """
+        self.assertTrue(len(place.__doc__) > 10)
+
+    def test_doc_class(self):
+        """
+        Test for the class documentation
+        """
+        self.assertTrue(len(Place.__doc__) > 10)
+
+    def test_docs_methods(self):
+        """
+        Test for the methods documentation
+        """
+        for method in dir(Place):
+            self.assertTrue(len(method.__doc__) > 10)
+
 
 
 if __name__ == "__main__":
