@@ -2,7 +2,8 @@
 
 import uuid
 from datetime import datetime
-from models import storage
+import models
+#from models import storage
 
 
 class BaseModel:
@@ -15,7 +16,7 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = self.created_at
-            storage.new(self)
+            models.storage.new(self)
         else:
             kwargs.pop("__class__")
             self.__dict__.update(**kwargs)
@@ -39,7 +40,7 @@ class BaseModel:
         """ updates the @update_at public intance attribute
             with the current date time. """
         self.updated_at = datetime.now()
-        storage.save()
+        models.storage.save()
 
     def to_dict(self):
         """ returns a dictionary containing all keys/values
