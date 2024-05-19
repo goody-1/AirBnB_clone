@@ -62,9 +62,9 @@ class TestCity(unittest.TestCase):
         city_dict = self.city.to_dict()
         self.assertIsInstance(city_dict, dict)
 
-        for att in ["id", "created_at", "updated_at","__class__"]:
+        for att in ["id", "created_at", "updated_at", "__class__"]:
             self.assertIn(att, city_dict.keys())
-            self.assertTrue(type(city_dict[att]) == str)
+            self.assertTrue(type(city_dict[att]) is str)
         self.assertEqual(city_dict["__class__"], "City")
 
     def test_city_str_representation(self):
@@ -72,9 +72,11 @@ class TestCity(unittest.TestCase):
         Test the string representation of the city object.
         """
         city_str = str(self.city)
-        self.assertAlmostEqual(city_str, "[City] ({} {})".format(self.city.id, self.city.__dict__))
+        self.assertCountEqual(city_str, "[City] ({} {})"
+                              .format(self.city.id, self.city.__dict__))
 
-    # test all docs
+
+# test all docs
 class TestCityModelDocs(unittest.TestCase):
     """
     Tests for the City class documentation

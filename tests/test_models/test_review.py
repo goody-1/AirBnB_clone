@@ -57,7 +57,9 @@ class TestReview(unittest.TestCase):
         """
         Test the string representation of the Review class.
         """
-        self.assertEqual(str(self.review), "<Review>")
+        self.assertCountEqual(str(self.review), "[Review] ({} {})"
+                              .format(self.review.id, self.review.__dict__))
+
 
 # test all docs
 class TestReviewModelDocs(unittest.TestCase):
@@ -82,6 +84,7 @@ class TestReviewModelDocs(unittest.TestCase):
         """
         for method in dir(Review):
             self.assertTrue(len(method.__doc__) > 10)
+
 
 if __name__ == '__main__':
     unittest.main()
