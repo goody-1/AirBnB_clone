@@ -10,6 +10,7 @@ from unittest.mock import patch
 from io import StringIO
 from console import HBNBCommand
 
+
 class TestHBNBCommand_prompt(unittest.TestCase):
     """ testing the prompt of the console """
 
@@ -25,6 +26,7 @@ class TestHBNBCommand_prompt(unittest.TestCase):
             os.remove("file.json")
         except FileNotFoundError:
             pass
+
 
 class TestHBNBCommand_help(unittest.TestCase):
     """ testing the help methods """
