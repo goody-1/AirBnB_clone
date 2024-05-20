@@ -5,6 +5,7 @@ import console
 import os
 import unittest
 import sys
+import pep8
 from models import storage
 from unittest.mock import patch
 from io import StringIO
@@ -27,6 +28,48 @@ class TestHBNBCommand_prompt(unittest.TestCase):
         except FileNotFoundError:
             pass
 
+    def test_pep8_console(self):
+        """ tests pep8 """
+        style = pep8.StyleGuide(quiet=False)
+        errors = 0
+        file = (["console.py"])
+        errors += style.check_files(file).total_errors
+        self.asserEqual(errors, 0, 'fix pep8')
+
+    def test_pep8_test_console(self):
+        """ tests test_console.py pep8 """
+        style = pep8.StyleGuide(quiet=False)
+        errors = 0
+        file = (["tests/test_console.py"])
+        errors += style.check_files(file).total_errors
+        self.asserEqual(errors, 0, 'fix pep8')
+
+    def test_docstrings_console(self):
+        """console.py docstrings"""
+        self.assertTrue(len(console.__doc__) >= 1)
+
+    def test_docstrings_test_console(self):
+        """test_console.py doctstrings"""
+        self.assertTrue(len(self.__doc__) >= 1)
+
+    def test_prompt_string(self):
+        self.assertEqual("(hbnb) ", HBNBCommand.prompt)
+
+    def test_empty_line(self):
+        with patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd(""))
+            self.assertEqual("", output.getvalue().strip())
+
+class TestHBNBCommand_exit(unittest.TestCase):
+    """exiting Test"""
+
+    def test_quit_exits(self):
+        with patch("sys.stdout", new=StringIO()) as output:
+            self.assertTrue(HBNBCommand().onecmd("quit"))
+
+    def test_EOF_exits(self):
+        with patch("sys.stdout", new=StringIO()) as output:
+            self.assertTrue(HBNBCommand().onecmd("EOF"))
 
 class TestHBNBCommand_help(unittest.TestCase):
     """ testing the help methods """
@@ -48,3 +91,32 @@ class TestHBNBCommand_help(unittest.TestCase):
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("help create"))
             self.assertEqual(txt, output.getvalue().strip())
+
+class TestHBNBCommand_create(unittest.TestCase):
+    """Unittests for testing create from the HBNB command interpreter."""
+
+    @classmethod
+    def setUp(self):
+        try:
+            os.rename("file.json", "tmp")
+        except IOError:
+            pass
+        FileStorage.__objects = {}
+
+
+    @classmethod
+    def tearDown(self):
+        try:
+            os.remove("file.json")
+        except IOError:
+            pass
+        try:
+            os.rename("tmp", "file.json")
+        except IOError:
+            pass
+    
+    def test_create_noclass(self):
+        errmsg = "** class name missing **"
+        with patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("create"))
+            self.assertEqual(errmsg, output.getvalue().strip())
