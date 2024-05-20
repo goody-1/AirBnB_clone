@@ -61,7 +61,8 @@ class TestUser(unittest.TestCase):
         user.last_name = "Doe"
         self.assertEqual(user.last_name, "Doe")
 
-    # test all docs
+
+# test all docs
 class TestUserModelDocs(unittest.TestCase):
     """
     Tests for the User class documentation

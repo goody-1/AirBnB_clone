@@ -32,7 +32,8 @@ class TestAmenity(unittest.TestCase):
         amenity.name = 'Swimming Pool'
         self.assertEqual(amenity.name, 'Swimming Pool')
 
-    # test all docs
+
+# test all docs
 class TestAmenityModelDocs(unittest.TestCase):
     """
     Tests for the Amenity class documentation
