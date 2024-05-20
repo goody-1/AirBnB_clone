@@ -28,7 +28,6 @@ class TestFileStorageAttributes(unittest.TestCase):
         Set up the resources for the tests
         """
 
-
     def setUp(self) -> None:
         """
         Set up the resources for the tests
@@ -42,8 +41,6 @@ class TestFileStorageAttributes(unittest.TestCase):
             os.remove("file.json")
 
         self.test_storage = storage
-
-
 
     def tearDown(self):
         """
@@ -59,7 +56,7 @@ class TestFileStorageAttributes(unittest.TestCase):
 
         del self.test_storage
 
-    def  test_file_json(self):
+    def test_file_json(self):
         """Test that the file "file.json" does not exists
         the first time the program is run"""
 
@@ -99,7 +96,10 @@ class TestFileStorageAttributes(unittest.TestCase):
         """
         obj = BaseModel()
         self.test_storage.new(obj)
-        self.assertIn(obj.__class__.__name__ + "." + obj.id, self.test_storage._FileStorage__objects)
+        self.assertIn(
+            obj.__class__.__name__ + "." +
+            obj.id, self.test_storage._FileStorage__objects
+            )
 
     def test_save_method(self):
         """
@@ -127,7 +127,11 @@ class TestFileStorageAttributes(unittest.TestCase):
         self.test_storage.reload()
 
         # Check if the object is reloaded correctly
-        self.assertIn(obj.__class__.__name__ + "." + obj.id, self.test_storage._FileStorage__objects)
+        self.assertIn(
+            obj.__class__.__name__ + "." +
+            obj.id, self.test_storage._FileStorage__objects
+            )
+
 
 # test all docs
 class TestFileStorageModelDocs(unittest.TestCase):
@@ -153,7 +157,11 @@ class TestFileStorageModelDocs(unittest.TestCase):
         for method in dir(FileStorage):
             self.assertTrue(len(method.__doc__) > 10)
 
-def find_project_root(current_path, targets=["README.md", "setup.py", ".git", "console.py"]):
+
+# Helper function to find the project root
+def find_project_root(
+    current_path,
+        targets=["README.md", "setup.py", ".git", "console.py"]):
     while current_path != os.path.dirname(current_path):
         if any(target in os.listdir(current_path) for target in targets):
             return current_path
