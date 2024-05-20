@@ -43,6 +43,7 @@ class TestHBNBCommand_prompt(unittest.TestCase):
             self.assertFalse(HBNBCommand().onecmd(""))
             self.assertEqual("", output.getvalue().strip())
 
+
 class TestHBNBCommand_exit(unittest.TestCase):
     """exiting Test"""
 
@@ -53,6 +54,7 @@ class TestHBNBCommand_exit(unittest.TestCase):
     def test_EOF_exits(self):
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertTrue(HBNBCommand().onecmd("EOF"))
+
 
 class TestHBNBCommand_help(unittest.TestCase):
     """ testing the help methods """
@@ -75,6 +77,7 @@ class TestHBNBCommand_help(unittest.TestCase):
             self.assertFalse(HBNBCommand().onecmd("help create"))
             self.assertEqual(txt, output.getvalue().strip())
 
+
 class TestHBNBCommand_create(unittest.TestCase):
     """Unittests for testing create from the HBNB command interpreter."""
 
@@ -86,7 +89,6 @@ class TestHBNBCommand_create(unittest.TestCase):
             pass
         FileStorage.__objects = {}
 
-
     @classmethod
     def tearDown(self):
         try:
@@ -97,7 +99,7 @@ class TestHBNBCommand_create(unittest.TestCase):
             os.rename("tmp", "file.json")
         except IOError:
             pass
-    
+
     def test_create_noclass(self):
         errmsg = "** class name missing **"
         with patch("sys.stdout", new=StringIO()) as output:
