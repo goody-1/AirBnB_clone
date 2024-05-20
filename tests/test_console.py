@@ -9,6 +9,7 @@ from models import storage
 from unittest.mock import patch
 from io import StringIO
 from console import HBNBCommand
+from models.engine.file_storage import FileStorage
 
 
 class TestHBNBCommand_prompt(unittest.TestCase):

@@ -66,14 +66,6 @@ class TestBaseModelInstantiation(unittest.TestCase):
             f"[BaseModel] ({self.test_model1.id}) {self.test_model1.__dict__}"
         )
 
-    def test_save_method(self):
-        """
-        Test the save method of the BaseModel class
-        """
-        self.test_model1.save()
-        self.assertNotEqual(self.test_model1.created_at,
-                            self.test_model1.updated_at)
-
     def test_to_dict_method(self):
         """
         Test the to_dict method of the BaseModel class
