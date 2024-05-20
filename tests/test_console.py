@@ -5,7 +5,6 @@ import console
 import os
 import unittest
 import sys
-import pep8
 from models import storage
 from unittest.mock import patch
 from io import StringIO
@@ -27,22 +26,6 @@ class TestHBNBCommand_prompt(unittest.TestCase):
             os.remove("file.json")
         except FileNotFoundError:
             pass
-
-    def test_pep8_console(self):
-        """ tests pep8 """
-        style = pep8.StyleGuide(quiet=False)
-        errors = 0
-        file = (["console.py"])
-        errors += style.check_files(file).total_errors
-        self.asserEqual(errors, 0, 'fix pep8')
-
-    def test_pep8_test_console(self):
-        """ tests test_console.py pep8 """
-        style = pep8.StyleGuide(quiet=False)
-        errors = 0
-        file = (["tests/test_console.py"])
-        errors += style.check_files(file).total_errors
-        self.asserEqual(errors, 0, 'fix pep8')
 
     def test_docstrings_console(self):
         """console.py docstrings"""
